@@ -76,6 +76,18 @@ def delete_employee(conn, employee_id):
         print(f"Error deleting employee: {str(e)}")
 
 
+def print_employee(conn):
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM employees")
+
+    # 获取查询结果
+    employees = cursor.fetchall()
+
+    # 打印查询结果
+    for employee in employees:
+        print(employee)
+
+
 if __name__ == "__main__":
     # 连接到MySQL数据库
     conn = create_connection()
@@ -93,6 +105,8 @@ if __name__ == "__main__":
 
         # 删除员工记录
         # delete_employee(conn, 1)
+
+        print_employee(conn)
 
         # 关闭数据库连接
         conn.close()
