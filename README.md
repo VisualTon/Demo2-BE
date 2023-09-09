@@ -1,26 +1,40 @@
 # Demo2-BE
 ## Steps
-- [x] Create a cluster by aws eks
-- [x] Download kubeconfig to deploy and manage resource
-```bash
-aws eks update-kubeconfig --name VisualTon2 --region ap-northeast-1
-export KUBECONFIG=$KUBECONFIG:/Users/leo_1/.kube/config
-```
-- [x] Create container by docker and mysql
-- [ ] write Kubernetes yaml(deployment.yaml) about container and image
-- [ ] Deploy container to cluster by Kubernetes yaml(deployment.yaml)
-```bash
-# 部署應用程式
-kubectl apply -f your-app.yaml
 
-# 查看部署
-kubectl get deployments
+## DB
+```bash
+#创建一個MySQL容器，并指定容器的名称、MySQL root密码、以及要映射的端口号
+docker run -d --name VisualTon1 -e MYSQL_ROOT_PASSWORD=0505jo -p 3390:3306 mysql:latest
 
-# 檢查 POD
-kubectl get pods
+#連接到MySQL容器
+docker exec -it VisualTon1 mysql -u root -p
+
+#顯示全部DB
+SHOW DATABASES;
+
+#創建DB
+CREATE DATABASE Tx;
+
+#選擇DB
+USE Example;
+
+#查看當前DB
+SELECT DATABASE();
+
+#查看當前DB有哪些table
+SHOW TABLES;
+
+#查看DB的table
+DESCRIBE employees;
 ```
-- [ ] the container run on the cluster
-- [ ] k8s Rolling Updates
-## Config
-- container name: VTC, image name: mysql:8.0
-- cluster name: VisualTon2, region: ap-northeast-1
+
+## run cronjob on EC2 instance (optional)
+### upload script to EC2 instance
+```bsah
+#TODO
+scp -i your-ec2-key.pem cronjob.py ec2-user@your-ec2-instance-ip:/home/ec2-user/
+```
+### connect to EC2 instance
+```bash
+ssh -i your-ec2-key.pem ec2-user@your-ec2-instance-ip
+```
