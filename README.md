@@ -3,17 +3,23 @@
 
 ## DB
 ```bash
-#创建一個MySQL容器，并指定容器的名称、MySQL root密码、以及要映射的端口号
-docker run -d --name VisualTon1 -e MYSQL_ROOT_PASSWORD=0505jo -p 3390:3306 mysql:latest
+#创建并运行一个名为 "VisualTon" 的MySQL容器
+docker run -d --name VisualTon -e MYSQL_ROOT_PASSWORD=0505jo -e MYSQL_DATABASE=example mysql:latest
 
-#連接到MySQL容器
+#构建自定义镜像
+docker build -t visualtonimage:latest .
+
+#連接container (pwd: 0505jo)
 docker exec -it VisualTon1 mysql -u root -p
+
+# 透過container name 查找host
+docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' VisualTon
 
 #顯示全部DB
 SHOW DATABASES;
 
 #創建DB
-CREATE DATABASE Tx;
+CREATE DATABASE Example;
 
 #選擇DB
 USE Example;
@@ -28,13 +34,5 @@ SHOW TABLES;
 DESCRIBE employees;
 ```
 
-## run cronjob on EC2 instance (optional)
-### upload script to EC2 instance
-```bsah
-#TODO
-scp -i your-ec2-key.pem cronjob.py ec2-user@your-ec2-instance-ip:/home/ec2-user/
-```
-### connect to EC2 instance
-```bash
-ssh -i your-ec2-key.pem ec2-user@your-ec2-instance-ip
-```
+#從table拿資料
+SELECT * FROM transactions;

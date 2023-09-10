@@ -1,5 +1,6 @@
 import mysql.connector
 import time
+import json
 
 
 # 创建MySQL连接
@@ -24,12 +25,13 @@ def create_table(conn):
 
     # 创建employees表
     create_table_query = """
-    CREATE TABLE employees (
-        employee_id INT AUTO_INCREMENT PRIMARY KEY,
-        first_name VARCHAR(50) NOT NULL,
-        last_name VARCHAR(50) NOT NULL,
-        email VARCHAR(100),
-        hire_date DATE
+    CREATE TABLE transactions2 (
+        Transaction_id VARCHAR(255) NOT NULL,
+        Sender_address VARCHAR(255) NOT NULL,
+        Receiver_address VARCHAR(255) NOT NULL,
+        Type VARCHAR(255),
+        Amount INT,
+        Confirm_time INT
     )
     """
     cursor.execute(create_table_query)
@@ -37,55 +39,70 @@ def create_table(conn):
     print("Table 'employees' created successfully")
 
 
-# 新增记录
-def add_employee(conn, employee_data):
+def add_data(conn, transaction_data):
     try:
         cursor = conn.cursor()
-        sql = "INSERT INTO employees (employee_id, first_name, last_name, email, hire_date) VALUES (%s, %s, %s, %s, %s)"
-        cursor.execute(sql, employee_data)
+        sql = """
+        INSERT INTO transactions2 (Transaction_id, Sender_address, Receiver_address, Type, Amount, Confirm_time)
+        VALUES (%s, %s, %s, %s, %s, %s)
+        """
+        cursor.execute(sql, transaction_data)
         conn.commit()
-        print("Employee added successfully")
+        print("Data added successfully")
     except Exception as e:
         conn.rollback()
-        print(f"Error adding employee: {str(e)}")
+        print(f"Error adding data: {str(e)}")
 
 
-# 编辑记录
-def edit_employee(conn, employee_id, new_last_name):
+# 删除特定数据（根据Transaction_id）
+def delete_data(conn, transaction_id):
     try:
         cursor = conn.cursor()
-        sql = "UPDATE employees SET last_name = %s WHERE employee_id = %s"
-        cursor.execute(sql, (new_last_name, employee_id))
+        sql = "DELETE FROM transactions2 WHERE Transaction_id = %s"
+        cursor.execute(sql, (transaction_id,))
         conn.commit()
-        print("Employee edited successfully")
+        print(f"Data with Transaction_id '{transaction_id}' deleted successfully")
     except Exception as e:
         conn.rollback()
-        print(f"Error editing employee: {str(e)}")
+        print(f"Error deleting data: {str(e)}")
 
 
-# 删除记录
-def delete_employee(conn, employee_id):
+def print_table_data(conn):
     try:
         cursor = conn.cursor()
-        sql = "DELETE FROM employees WHERE employee_id = %s"
-        cursor.execute(sql, (employee_id,))
-        conn.commit()
-        print("Employee deleted successfully")
+        sql = "SELECT * FROM transactions2"
+        cursor.execute(sql)
+
+        # 获取所有数据行
+        rows = cursor.fetchall()
+
+        data_list = []
+
+        # 将每行数据打包为 JSON 并添加到列表中
+        for row in rows:
+            (
+                transaction_id,
+                sender_address,
+                receiver_address,
+                type,
+                amount,
+                confirm_time,
+            ) = row
+            data = {
+                "Transaction_id": transaction_id,
+                "Sender_address": sender_address,
+                "Receiver_address": receiver_address,
+                "Type": type,
+                "Amount": amount,
+                "Confirm_time": confirm_time,
+            }
+            data_list.append(data)
+
+        # 将数据列表转换为 JSON 格式并打印
+        print(data_list)
+
     except Exception as e:
-        conn.rollback()
-        print(f"Error deleting employee: {str(e)}")
-
-
-def print_employee(conn):
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM employees")
-
-    # 获取查询结果
-    employees = cursor.fetchall()
-
-    # 打印查询结果
-    for employee in employees:
-        print(employee)
+        print(f"Error fetching data: {str(e)}")
 
 
 if __name__ == "__main__":
@@ -93,20 +110,25 @@ if __name__ == "__main__":
     conn = create_connection()
 
     if conn:
+        print("success connect")
         # 創建表格
         # create_table(conn)
 
-        # 新增员工记录
-        # employee_data = (1, "John", "Doe", "john@example.com", "2023-09-09")
-        # add_employee(conn, employee_data)
+        # 添加新数据
+        transaction_data = (
+            str(int(time.time())),
+            "Sender_Address",
+            "Receiver_Address",
+            "DEFI",
+            100,
+            int(time.time()),
+        )
+        add_data(conn, transaction_data)
 
-        # # 编辑员工记录
-        edit_employee(conn, 1, str(int(time.time())))
+        # # 删除特定数据（根据Transaction_id）
+        # transaction_id_to_delete = "New_Transaction_ID"
+        # delete_data(conn, transaction_id_to_delete)
 
-        # 删除员工记录
-        # delete_employee(conn, 1)
-
-        print_employee(conn)
-
+        print_table_data(conn)
         # 关闭数据库连接
         conn.close()
