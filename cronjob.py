@@ -5,7 +5,7 @@ import requests
 import asyncio
 import json
 
-prev_latest_block = 32616077
+prev_latest_block = 32616642
 remove_from = 0
 BLOCK_NUM = 10
 
@@ -56,7 +56,6 @@ async def get_tx_info_by_tx_id(txid: str, block_id: int) -> tx | None:
     # get transaction info
     url = f"https://tonapi.io/v2/blockchain/transactions/{txid}"
     response = await get_request(url)
-    # time.sleep(5)
     data = response.json()
 
     if "in_msg" in data:
@@ -74,7 +73,11 @@ async def get_tx_info_by_tx_id(txid: str, block_id: int) -> tx | None:
             return res
 
     if "out_msgs" in data:
-        out_msgs = data["out_msgs"][0]
+        out_msgs = (
+            data["out_msgs"][0]
+            if isinstance(data["out_msgs"], list)
+            else data["out_msgs"]
+        )
         if "source" in out_msgs and "destination" in out_msgs and out_msgs["value"] > 0:
             res: tx = {
                 "tx_id": data["hash"],
@@ -100,14 +103,18 @@ async def get_txs_by_block_ids(block_ids: [int]) -> [tx]:
         print(f"start to get block {id} tx...")
         block_url = f"https://tonapi.io/v2/blockchain/blocks/(0,8000000000000000,{id})/transactions"
         response = await get_request(block_url)
+        time.sleep(2)
         block_data = response.json()
 
         if "transactions" in block_data:
+            lens = len(block_data["transactions"])
+            print(f"there are {lens} tx to analyze")
             for transaction in block_data["transactions"]:
                 hash_value: str = transaction["hash"]
-                tmp = await get_tx_info_by_tx_id(hash_value, id)
+                tmp: tx = await get_tx_info_by_tx_id(hash_value, id)
+                time.sleep(3)
                 if tmp is not None:
-                    all_txs.extend(tmp)
+                    all_txs.append(tmp)
         else:
             print(f"can't find transaction in block {id}")
             continue
@@ -148,6 +155,9 @@ async def update_database(conn):
     # print("start to get block tx...")
     added_txs: [tx] = await get_txs_by_block_ids(added_block_ids)
     removed_txs: [tx] = await get_txs_by_block_ids(removed_block_ids)
+
+    print("added_txs:")
+    print(added_txs)
 
     print("start to filter the txs...")
     # TODO
