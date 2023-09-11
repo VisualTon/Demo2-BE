@@ -7,11 +7,11 @@ import json
 def create_connection():
     try:
         conn = mysql.connector.connect(
-            host="localhost",
-            port=3390,
-            user="root",
-            password="0505jo",
-            database="Example",
+            host="localhost",  # 如果 MySQL 服务器在本地，使用 "localhost"；如果在不同的主机上，使用该主机的 IP 地址
+            port=3390,  # 映射的本地端口
+            user="root",  # MySQL 用户名
+            password="0505jo",  # MySQL 密码
+            database="visualtondb",  # 要连接的数据库名称
         )
         return conn
     except Exception as e:
@@ -23,10 +23,10 @@ def create_table(conn):
     # 创建游标对象
     cursor = conn.cursor()
 
-    # 创建employees表
     create_table_query = """
-    CREATE TABLE transactions2 (
+    CREATE TABLE transactions (
         Transaction_id VARCHAR(255) NOT NULL,
+        Block_id INT,
         Sender_address VARCHAR(255) NOT NULL,
         Receiver_address VARCHAR(255) NOT NULL,
         Type VARCHAR(255),
@@ -36,14 +36,14 @@ def create_table(conn):
     """
     cursor.execute(create_table_query)
     conn.commit()
-    print("Table 'employees' created successfully")
+    print("Table 'transactions' created successfully")
 
 
 def add_data(conn, transaction_data):
     try:
         cursor = conn.cursor()
         sql = """
-        INSERT INTO transactions2 (Transaction_id, Sender_address, Receiver_address, Type, Amount, Confirm_time)
+        INSERT INTO transactions (Transaction_id, Sender_address, Receiver_address, Type, Amount, Confirm_time)
         VALUES (%s, %s, %s, %s, %s, %s)
         """
         cursor.execute(sql, transaction_data)
@@ -58,7 +58,7 @@ def add_data(conn, transaction_data):
 def delete_data(conn, transaction_id):
     try:
         cursor = conn.cursor()
-        sql = "DELETE FROM transactions2 WHERE Transaction_id = %s"
+        sql = "DELETE FROM transactions WHERE Transaction_id = %s"
         cursor.execute(sql, (transaction_id,))
         conn.commit()
         print(f"Data with Transaction_id '{transaction_id}' deleted successfully")
@@ -70,7 +70,7 @@ def delete_data(conn, transaction_id):
 def print_table_data(conn):
     try:
         cursor = conn.cursor()
-        sql = "SELECT * FROM transactions2"
+        sql = "SELECT * FROM transactions"
         cursor.execute(sql)
 
         # 获取所有数据行
@@ -112,11 +112,11 @@ if __name__ == "__main__":
     if conn:
         print("success connect")
         # 創建表格
-        # create_table(conn)
+        create_table(conn)
 
         # 添加新数据
         transaction_data = (
-            str(int(time.time())),
+            "test",
             "Sender_Address",
             "Receiver_Address",
             "DEFI",
@@ -125,10 +125,10 @@ if __name__ == "__main__":
         )
         add_data(conn, transaction_data)
 
-        # # 删除特定数据（根据Transaction_id）
-        # transaction_id_to_delete = "New_Transaction_ID"
-        # delete_data(conn, transaction_id_to_delete)
+        # # # 删除特定数据（根据Transaction_id）
+        # # transaction_id_to_delete = "New_Transaction_ID"
+        # # delete_data(conn, transaction_id_to_delete)
 
-        print_table_data(conn)
+        # print_table_data(conn)
         # 关闭数据库连接
         conn.close()
