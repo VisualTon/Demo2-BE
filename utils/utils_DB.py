@@ -1,3 +1,8 @@
+from utils.utils_api import (
+    tx,
+)
+
+
 def add_data(conn, transaction_data):
     try:
         cursor = conn.cursor()
@@ -24,7 +29,6 @@ def add_data(conn, transaction_data):
         print(f"Error adding data: {str(e)}")
 
 
-# 删除特定数据（根据Transaction_id）
 def delete_data(conn, block_ids: [int]):
     for block_id in block_ids:
         try:
@@ -32,24 +36,22 @@ def delete_data(conn, block_ids: [int]):
             sql = "DELETE FROM transactions WHERE Block_id = %s"
             cursor.execute(sql, (block_id,))
             conn.commit()
-            print(f"Data with Block_id '{block_id}' deleted successfully")
+            # print(f"Data with Block_id '{block_id}' deleted successfully")
         except Exception as e:
             conn.rollback()
             print(f"Error deleting data: {str(e)}")
 
 
-def print_table_data(conn):
+def get_table_data(conn) -> [tx]:
     try:
         cursor = conn.cursor()
         sql = "SELECT * FROM transactions"
         cursor.execute(sql)
 
-        # 获取所有数据行
         rows = cursor.fetchall()
 
-        data_list = []
+        data_list: [tx] = []
 
-        # 将每行数据打包为 JSON 并添加到列表中
         for row in rows:
             (
                 transaction_id,
@@ -60,7 +62,7 @@ def print_table_data(conn):
                 amount,
                 confirm_time,
             ) = row
-            data = {
+            data: tx = {
                 "Transaction_id": transaction_id,
                 "Block_id": block_id,
                 "Sender_address": sender_address,
@@ -71,8 +73,7 @@ def print_table_data(conn):
             }
             data_list.append(data)
 
-        # 将数据列表转换为 JSON 格式并打印
-        print(data_list)
+        return data_list
 
     except Exception as e:
         print(f"Error fetching data: {str(e)}")

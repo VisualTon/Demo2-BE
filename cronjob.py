@@ -7,12 +7,9 @@ from utils.utils_api import (
     create_connection,
     filter_tx,
 )
-from utils.utils_DB import (
-    add_data,
-    delete_data,
-)
+from utils.utils_DB import add_data, delete_data, get_table_data
 
-prev_latest_block = 38357323
+prev_latest_block = 38357867
 remove_from = 0
 BLOCK_NUM = 100
 MAX_BLOCK_DISTANCE = 15
@@ -55,8 +52,6 @@ async def update_database(conn):
 
     print("start to filter the txs...")
     added_txs = filter_tx(added_txs)
-    print("added_txs:")
-    print(added_txs)
 
     print("start to add new txs in DB...")
     if len(added_txs) != 0:
@@ -67,7 +62,9 @@ async def update_database(conn):
         print(f"remove block {removed_block_ids}")
         delete_data(conn, removed_block_ids)
 
-    print("fetch out all DB data...")
+    print("fetch out all exist DB data...")
+    all_txs: [tx] = get_table_data(conn)
+    print(f"there are {len(all_txs)} txs in table.")
     # TODO
 
     remove_from = latest_block_id - BLOCK_NUM

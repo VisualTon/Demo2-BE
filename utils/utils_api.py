@@ -87,14 +87,14 @@ async def analyze_tx_to_tx_info(transaction, block_id: int) -> tx | None:
             return res
     tx_id = transaction["hash"]
     print(f"can't analyze tx {tx_id} !")
-    print(transaction)
+    # print(transaction)
 
 
 async def get_txs_by_block_ids(block_ids: [int]) -> [tx]:
     all_txs: [tx] = []
     response = None
     for id in block_ids:
-        print(f"start to get block {id} tx...")
+        # print(f"start to get block {id} tx...")
 
         if id % 2 == 0:
             continue
@@ -105,8 +105,8 @@ async def get_txs_by_block_ids(block_ids: [int]) -> [tx]:
         block_data = response.json()
 
         if "transactions" in block_data:
-            lens = len(block_data["transactions"])
-            print(f"there are {lens} txs to analyze")
+            # lens = len(block_data["transactions"])
+            # print(f"there are {lens} txs to analyze")
 
             for transaction in block_data["transactions"]:
                 if transaction["transaction_type"] != "TransOrd":
@@ -135,7 +135,7 @@ async def get_latest_block_id() -> int:
 
 
 def filter_tx(txs: [tx]) -> [tx]:
-    print(f"before filter, the total tx is {len(txs)}")
+    # print(f"before filter, the total tx is {len(txs)}")
     filtered_tx_list = list(filter(lambda tx: tx["amount"] >= VALUE_UPPER_LIMIT, txs))
-    print(f"after filter, the total tx is {len(filtered_tx_list)}")
+    # print(f"after filter, the total tx is {len(filtered_tx_list)}")
     return filtered_tx_list
