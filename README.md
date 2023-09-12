@@ -4,9 +4,10 @@
 ## DB
 ```bash
 #创建并运行一个名为 "VisualTon" 的MySQL容器
-docker run -d --name VisualTon -e MYSQL_ROOT_PASSWORD=0505jo -e MYSQL_DATABASE=example mysql:latest
+docker run -d --name VisualTon -e MYSQL_ROOT_PASSWORD=0505jo -e MYSQL_DATABASE=example -p 3390:3306 mysql:latest 
+docker run --name myphpadminVisualTon -d --link VisualTon:db -p 8081:80 phpmyadmin/phpmyadmin
 
-#构建自定义镜像
+#构建自定义镜像(不需要)
 docker build -t visualtonimage:latest .
 
 #連接container (pwd: 0505jo)
@@ -31,8 +32,11 @@ SELECT DATABASE();
 SHOW TABLES;
 
 #查看DB的table
-DESCRIBE employees;
-```
+DESCRIBE transactions;
 
 #從table拿資料
 SELECT * FROM transactions;
+
+# 刪除table
+DROP TABLE transactions;
+```

@@ -3,9 +3,20 @@ def add_data(conn, transaction_data):
         cursor = conn.cursor()
         sql = """
         INSERT INTO transactions (Transaction_id, Block_id, Sender_address, Receiver_address, Type, Amount, Confirm_time)
-        VALUES (%s, %s, %s, %s, %s, %s)
+        VALUES (%s, %s, %s, %s, %s, %s, %s)
         """
-        cursor.execute(sql, transaction_data)
+        for tx in transaction_data:
+            data = (
+                tx["tx_id"],
+                tx["block_id"],
+                tx["sender_address"],
+                tx["receiver_address"],
+                tx["type"],
+                (int(tx["amount"]) / 1000000000),
+                tx["confirm_time"],
+            )
+            cursor.execute(sql, data)
+
         conn.commit()
         print("Data added successfully")
     except Exception as e:
@@ -14,16 +25,17 @@ def add_data(conn, transaction_data):
 
 
 # 删除特定数据（根据Transaction_id）
-def delete_data(conn, transaction_id):
-    try:
-        cursor = conn.cursor()
-        sql = "DELETE FROM transactions WHERE Transaction_id = %s"
-        cursor.execute(sql, (transaction_id,))
-        conn.commit()
-        print(f"Data with Transaction_id '{transaction_id}' deleted successfully")
-    except Exception as e:
-        conn.rollback()
-        print(f"Error deleting data: {str(e)}")
+def delete_data(conn, block_ids: [int]):
+    for block_id in block_ids:
+        try:
+            cursor = conn.cursor()
+            sql = "DELETE FROM transactions WHERE Block_id = %s"
+            cursor.execute(sql, (block_id,))
+            conn.commit()
+            print(f"Data with Block_id '{block_id}' deleted successfully")
+        except Exception as e:
+            conn.rollback()
+            print(f"Error deleting data: {str(e)}")
 
 
 def print_table_data(conn):

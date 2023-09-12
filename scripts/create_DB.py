@@ -11,7 +11,7 @@ def create_connection():
             port=3390,  # 映射的本地端口
             user="root",  # MySQL 用户名
             password="0505jo",  # MySQL 密码
-            database="visualtondb",  # 要连接的数据库名称
+            database="example",  # 要连接的数据库名称
         )
         return conn
     except Exception as e:

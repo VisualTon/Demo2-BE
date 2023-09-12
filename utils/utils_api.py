@@ -26,7 +26,7 @@ def create_connection():
             port=3390,
             user="root",
             password="0505jo",
-            database="visualtondb",
+            database="example",
         )
         return conn
     except Exception as e:
