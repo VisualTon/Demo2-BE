@@ -65,7 +65,6 @@ async def update_database(conn):
     print("fetch out all exist DB data...")
     all_txs: [tx] = get_table_data(conn)
     print(f"there are {len(all_txs)} txs in table.")
-    # TODO
 
     remove_from = latest_block_id - BLOCK_NUM
     prev_latest_block = latest_block_id
