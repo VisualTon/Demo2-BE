@@ -91,6 +91,8 @@ async def get_txs_by_block_ids(block_ids: [int]) -> [tx]:
     all_txs: [tx] = []
 
     for id in block_ids:
+        if id % 2 == 0:
+            continue
         print(f"start to get block {id} tx...")
 
         block_url = f"https://tonapi.io/v2/blockchain/blocks/(0,8000000000000000,{id})/transactions"
