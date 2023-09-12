@@ -12,9 +12,9 @@ from utils.utils_DB import (
     delete_data,
 )
 
-prev_latest_block = 38357246
+prev_latest_block = 38357323
 remove_from = 0
-BLOCK_NUM = 30
+BLOCK_NUM = 100
 MAX_BLOCK_DISTANCE = 15
 
 # base on basechain, not masterchain
@@ -53,11 +53,10 @@ async def update_database(conn):
     # print("start to get block tx...")
     added_txs: [tx] = await get_txs_by_block_ids(added_block_ids)
 
-    print("added_txs:")
-    print(added_txs)
-
     print("start to filter the txs...")
     added_txs = filter_tx(added_txs)
+    print("added_txs:")
+    print(added_txs)
 
     print("start to add new txs in DB...")
     if len(added_txs) != 0:
