@@ -40,6 +40,8 @@ async def get_request(block_url):
             response.raise_for_status()
         except requests.exceptions.RequestException as e:
             print("Request failed:", e)
+            print("sleep a while...")
+            time.sleep(2)
             continue
     if response.status_code == 200:
         return response
@@ -93,7 +95,6 @@ async def get_txs_by_block_ids(block_ids: [int]) -> [tx]:
 
         block_url = f"https://tonapi.io/v2/blockchain/blocks/(0,8000000000000000,{id})/transactions"
         response = await get_request(block_url)
-        time.sleep(1.5)
         block_data = response.json()
 
         if "transactions" in block_data:
