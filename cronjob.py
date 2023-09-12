@@ -5,9 +5,10 @@ from utils.utils import (
     get_txs_by_block_ids,
     get_latest_block_id,
     create_connection,
+    filter_tx,
 )
 
-prev_latest_block = 38353900
+prev_latest_block = 38355830
 remove_from = 0
 BLOCK_NUM = 10
 MAX_BLOCK_DISTANCE = 15
@@ -53,7 +54,7 @@ async def update_database(conn):
 
     print("start to filter the txs...")
     # TODO
-    # added_txs = filter_tx(added_txs)
+    added_txs = filter_tx(added_txs)
 
     print("start to add new txs in DB...")
     # TODO

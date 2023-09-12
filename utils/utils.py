@@ -5,6 +5,9 @@ import requests
 import asyncio
 import json
 
+VALUE_UPPER_LIMIT = 1000000000 * 100
+# 100 TON
+
 
 class tx:
     tx_id: str
@@ -127,3 +130,10 @@ async def get_latest_block_id() -> int:
     paylaod = {"query": "{wcBlocks: blocks(workchain: 0, page_size: 1) { seqno }}"}
     r = requests.post("https://dton.io/graphql/", data=paylaod).json()
     return int(r["data"]["wcBlocks"][0]["seqno"])
+
+
+def filter_tx(txs: [tx]) -> [tx]:
+    print(f"before filter, the total tx is {len(txs)}")
+    filtered_tx_list = list(filter(lambda tx: tx["amount"] >= VALUE_UPPER_LIMIT, txs))
+    print(f"after filter, the total tx is {len(filtered_tx_list)}")
+    return filtered_tx_list
