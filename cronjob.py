@@ -7,7 +7,7 @@ from utils.utils import (
     create_connection,
 )
 
-prev_latest_block = 38351995
+prev_latest_block = 38353900
 remove_from = 0
 BLOCK_NUM = 10
 MAX_BLOCK_DISTANCE = 15
@@ -53,11 +53,15 @@ async def update_database(conn):
 
     print("start to filter the txs...")
     # TODO
+    # added_txs = filter_tx(added_txs)
 
     print("start to add new txs in DB...")
     # TODO
 
     print("start to remove old txs in DB...")
+    # TODO
+
+    print("fetch out all DB data...")
     # TODO
 
     remove_from = latest_block_id - BLOCK_NUM
