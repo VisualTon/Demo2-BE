@@ -1,11 +1,15 @@
 import schedule
 import asyncio
-from utils.utils import (
+from utils.utils_api import (
     tx,
     get_txs_by_block_ids,
     get_latest_block_id,
     create_connection,
     filter_tx,
+)
+from utils.utils_DB import (
+    add_data,
+    delete_data,
 )
 
 prev_latest_block = 38355830
@@ -53,11 +57,10 @@ async def update_database(conn):
     print(added_txs)
 
     print("start to filter the txs...")
-    # TODO
     added_txs = filter_tx(added_txs)
 
     print("start to add new txs in DB...")
-    # TODO
+    add_data(conn, added_txs)
 
     print("start to remove old txs in DB...")
     # TODO

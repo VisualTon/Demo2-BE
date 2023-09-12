@@ -92,14 +92,16 @@ async def analyze_tx_to_tx_info(transaction, block_id: int) -> tx | None:
 
 async def get_txs_by_block_ids(block_ids: [int]) -> [tx]:
     all_txs: [tx] = []
-
+    response = None
     for id in block_ids:
-        if id % 2 == 0:
-            continue
         print(f"start to get block {id} tx...")
 
-        block_url = f"https://tonapi.io/v2/blockchain/blocks/(0,8000000000000000,{id})/transactions"
-        response = await get_request(block_url)
+        if id % 2 == 0:
+            continue
+        else:
+            block_url = f"https://tonapi.io/v2/blockchain/blocks/(0,8000000000000000,{id})/transactions"
+            response = await get_request(block_url)
+
         block_data = response.json()
 
         if "transactions" in block_data:
