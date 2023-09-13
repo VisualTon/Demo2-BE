@@ -1,17 +1,14 @@
 import mysql.connector
-import time
-import json
 
 
-# 创建MySQL连接
 def create_connection():
     try:
         conn = mysql.connector.connect(
-            host="localhost",  # 如果 MySQL 服务器在本地，使用 "localhost"；如果在不同的主机上，使用该主机的 IP 地址
-            port=3390,  # 映射的本地端口
-            user="root",  # MySQL 用户名
-            password="0505jo",  # MySQL 密码
-            database="example",  # 要连接的数据库名称
+            host="localhost",
+            port=3390,
+            user="root",
+            password="0505jo",
+            database="example",
         )
         return conn
     except Exception as e:
@@ -20,7 +17,6 @@ def create_connection():
 
 
 def create_table(conn):
-    # 创建游标对象
     cursor = conn.cursor()
 
     create_table_query = """
@@ -40,11 +36,9 @@ def create_table(conn):
 
 
 if __name__ == "__main__":
-    # 连接到MySQL数据库
     conn = create_connection()
 
     if conn:
         print("success connect")
-        # 創建表格
         create_table(conn)
         conn.close()
