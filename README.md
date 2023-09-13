@@ -1,21 +1,34 @@
 # Demo2-BE
 ## Steps
-
-## DB
 ```bash
-#创建并运行一个名为 "VisualTon" 的MySQL容器
+#create and run container
 docker run -d --name VisualTon -e MYSQL_ROOT_PASSWORD=0505jo -e MYSQL_DATABASE=example -p 3390:3306 mysql:latest 
+
+#(optional) 用phpmyadmin 觀察data
 docker run --name myphpadminVisualTon -d --link VisualTon:db -p 8081:80 phpmyadmin/phpmyadmin
 
-#构建自定义镜像(不需要)
-docker build -t visualtonimage:latest .
-
 #連接container (pwd: 0505jo)
-docker exec -it VisualTon1 mysql -u root -p
+docker exec -it VisualTon mysql -u root -p
 
-# 透過container name 查找host
-docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' VisualTon
+#open another terminal
 
+#create DB
+python scripts/create_DB.py
+
+#get the block id(the start block)
+python scripts/get_latest_basechain_height.py
+
+#paste the result to cronjob.py 'prev_latest_block' variable
+
+#run the cronjob
+python cronjob.py
+
+#observe the DB and debug...
+```
+
+
+## check DB
+```bash
 #顯示全部DB
 SHOW DATABASES;
 
