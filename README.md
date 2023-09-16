@@ -1,16 +1,17 @@
 # Demo2-BE
 ## Steps
 ```bash
-#create and run container
-docker run -d --name VisualTon -e MYSQL_ROOT_PASSWORD=0505jo -e MYSQL_DATABASE=example -p 3390:3306 mysql:latest 
+#ssh to ec2 instance (terminal 1)
+ssh -i VisualTonKeyPair.pem ec2-user@3.112.222.156
 
-#(optional) 用phpmyadmin 觀察data
-docker run --name myphpadminVisualTon -d --link VisualTon:db -p 8081:80 phpmyadmin/phpmyadmin
+#(ONLY DO ONCE) create and run container after ssh to instance (terminal 1)
+docker run -d --name VisualTon -e MYSQL_ROOT_PASSWORD=0505jo -e MYSQL_DATABASE=example -p 3306:3306 mysql:latest 
 
-#連接container (pwd: 0505jo)
+# 連接container  (terminal 1)(pwd: 0505jo)
 docker exec -it VisualTon mysql -u root -p
 
-#open another terminal
+#(optional) 用phpmyadmin 觀察data (terminal 2)
+docker run --name myphpadminVisualTon -d -e PMA_HOST=3.112.222.156 -e PMA_PORT=3306 -p 8081:80 phpmyadmin/phpmyadmin
 
 #create DB
 python scripts/create_DB.py
@@ -36,7 +37,7 @@ SHOW DATABASES;
 CREATE DATABASE Example;
 
 #選擇DB
-USE Example;
+USE example;
 
 #查看當前DB
 SELECT DATABASE();

@@ -4,8 +4,8 @@ import mysql.connector
 def create_connection():
     try:
         conn = mysql.connector.connect(
-            host="localhost",
-            port=3390,
+            host="3.112.222.156",
+            port=3306,
             user="root",
             password="0505jo",
             database="example",
