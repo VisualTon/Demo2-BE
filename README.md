@@ -1,15 +1,17 @@
 # Demo2-BE
-## Steps
-```bash
+在 aws ec2 create instance, 產出 `VisualTonKeyPair.pem`
+``` bash
 #ssh to ec2 instance (terminal 1)
 ssh -i VisualTonKeyPair.pem ec2-user@3.112.222.156
 
-#(ONLY DO ONCE) create and run container after ssh to instance (terminal 1)
+#create and run container after ssh to instance (terminal 1)
 docker run -d --name VisualTon -e MYSQL_ROOT_PASSWORD=0505jo -e MYSQL_DATABASE=example -p 3306:3306 mysql:latest 
 
 # 連接container  (terminal 1)(pwd: 0505jo)
 docker exec -it VisualTon mysql -u root -p
-
+```
+## Steps
+```bash
 #(optional) 用phpmyadmin 觀察data (terminal 2)
 docker run --name myphpadminVisualTon -d -e PMA_HOST=3.112.222.156 -e PMA_PORT=3306 -p 8081:80 phpmyadmin/phpmyadmin
 
