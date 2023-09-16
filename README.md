@@ -58,4 +58,4 @@ DROP TABLE transactions;
 ```
 
 ## Note
-- 500 blocks -> about 15 min -> about 50 * 2 tx
+- 500 blocks -> about 15 min -> about 300~500 tx
