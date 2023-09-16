@@ -1,6 +1,11 @@
-from utils.utils_api import (
-    tx,
-)
+class tx:
+    tx_id: str
+    block_id: int
+    sender_address: str
+    receiver_address: str
+    type: str
+    amount: int
+    confirm_time: int
 
 
 def add_data(conn, transaction_data):
@@ -40,6 +45,26 @@ def delete_data(conn, block_ids: [int]):
         except Exception as e:
             conn.rollback()
             print(f"Error deleting data: {str(e)}")
+
+
+def delete_duplicate_data(txs: [tx]) -> [tx]:
+    seen = set()
+    result: [tx] = []
+
+    for item in txs:
+        record = (
+            item["block_id"],
+            item["sender_address"],
+            item["receiver_address"],
+            item["amount"],
+            item["confirm_time"],
+        )
+
+        if record not in seen:
+            seen.add(record)
+            result.append(item)
+
+    return result
 
 
 def get_table_data(conn) -> [tx]:

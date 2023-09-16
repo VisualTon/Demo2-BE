@@ -8,6 +8,8 @@ import json
 VALUE_UPPER_LIMIT = 1000000000 * 100
 # 100 TON
 
+from utils.utils_DB import delete_duplicate_data
+
 
 class tx:
     tx_id: str
@@ -137,5 +139,6 @@ async def get_latest_block_id() -> int:
 def filter_tx(txs: [tx]) -> [tx]:
     # print(f"before filter, the total tx is {len(txs)}")
     filtered_tx_list = list(filter(lambda tx: tx["amount"] >= VALUE_UPPER_LIMIT, txs))
+    filtered_tx_list = delete_duplicate_data(filtered_tx_list)
     # print(f"after filter, the total tx is {len(filtered_tx_list)}")
     return filtered_tx_list

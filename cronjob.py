@@ -7,11 +7,11 @@ from utils.utils_api import (
     create_connection,
     filter_tx,
 )
-from utils.utils_DB import add_data, delete_data, get_table_data
+from utils.utils_DB import add_data, delete_data, get_table_data, delete_duplicate_data
 
-prev_latest_block = 38357867
+prev_latest_block = 38467786
 remove_from = 0
-BLOCK_NUM = 100
+BLOCK_NUM = 500
 MAX_BLOCK_DISTANCE = 15
 
 # base on basechain, not masterchain
@@ -50,10 +50,10 @@ async def update_database(conn):
     # print("start to get block tx...")
     added_txs: [tx] = await get_txs_by_block_ids(added_block_ids)
 
-    print("start to filter the txs...")
+    # print("start to filter the txs...")
     added_txs = filter_tx(added_txs)
 
-    print("start to add new txs in DB...")
+    # print("start to add new txs in DB...")
     if len(added_txs) != 0:
         add_data(conn, added_txs)
 
@@ -64,7 +64,7 @@ async def update_database(conn):
 
     print("fetch out all exist DB data...")
     all_txs: [tx] = get_table_data(conn)
-    print(f"there are {len(all_txs)} txs in table.")
+    # print(f"there are {len(all_txs)} txs in table.")
 
     remove_from = latest_block_id - BLOCK_NUM
     prev_latest_block = latest_block_id
