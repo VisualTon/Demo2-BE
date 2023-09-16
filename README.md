@@ -56,3 +56,6 @@ SELECT * FROM transactions;
 # 刪除table
 DROP TABLE transactions;
 ```
+
+## Note
+- 500 blocks -> about 15 min -> about 50 * 2 tx
