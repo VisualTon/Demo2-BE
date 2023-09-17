@@ -9,7 +9,7 @@ from utils.utils_api import (
 )
 from utils.utils_DB import add_data, delete_data, get_table_data, delete_duplicate_data
 
-prev_latest_block = 38467786
+prev_latest_block = 38488382
 remove_from = 0
 BLOCK_NUM = 500
 MAX_BLOCK_DISTANCE = 15
