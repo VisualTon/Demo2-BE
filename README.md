@@ -9,6 +9,9 @@ docker run -d --name VisualTon -e MYSQL_ROOT_PASSWORD=0505jo -e MYSQL_DATABASE=e
 
 # 連接container  (terminal 1)(pwd: 0505jo)
 docker exec -it VisualTon mysql -u root -p
+
+# in local, copy file from local to instance:
+scp -i Demo2-BE/VisualTonKeyPair.pem -r THE_FILE_PATH ec2-user@3.112.222.156:/home/ec2-user/
 ```
 ## Steps
 ```bash
