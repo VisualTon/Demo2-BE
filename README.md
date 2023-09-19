@@ -13,6 +13,17 @@ docker exec -it VisualTon mysql -u root -p
 # in local, copy file from local to instance:
 scp -i Demo2-BE/VisualTonKeyPair.pem -r THE_FILE_PATH ec2-user@3.112.222.156:/home/ec2-user/
 ```
+
+## nohup
+```bash
+# run in instance
+nohup python cronjob.py &
+
+# find pid and kill to stop
+ps -aux | grep cronjob.py
+kill -9 PID
+```
+
 ## Steps
 ```bash
 #(optional) 用phpmyadmin 觀察data (terminal 2)
