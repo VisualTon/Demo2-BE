@@ -1,6 +1,5 @@
 from utils.utils_DB import add_addr_data
 from utils.utils_api import (
-    tx,
     create_connection,
 )
 

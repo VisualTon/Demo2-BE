@@ -3,17 +3,6 @@ from utils.utils_api import (
     create_connection,
 )
 
-
-class tx:
-    tx_id: str
-    block_id: int
-    sender_address: str
-    receiver_address: str
-    type: str
-    amount: int
-    confirm_time: int
-
-
 if __name__ == "__main__":
     conn = create_connection()
 

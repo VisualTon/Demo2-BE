@@ -1,19 +1,6 @@
-import mysql.connector
-
-
-def create_connection():
-    try:
-        conn = mysql.connector.connect(
-            host="3.112.222.156",
-            port=3306,
-            user="root",
-            password="0505jo",
-            database="example",
-        )
-        return conn
-    except Exception as e:
-        print(f"Error connecting to MySQL: {str(e)}")
-        return None
+from utils.utils_api import (
+    create_connection,
+)
 
 
 def create_table(conn):
