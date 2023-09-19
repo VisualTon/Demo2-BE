@@ -14,14 +14,20 @@ docker exec -it VisualTon mysql -u root -p
 scp -i Demo2-BE/VisualTonKeyPair.pem -r THE_FILE_PATH ec2-user@3.112.222.156:/home/ec2-user/
 ```
 
+## update prev_latest_block in vm
+```bash
+vim Demo2-BE/cronjob.py 
+```
+
+
 ## nohup
 ```bash
 # run in instance
-nohup python cronjob.py &
+nohup python Demo2-BE/cronjob.py &
 
 # find pid and kill to stop
-ps -aux | grep cronjob.py
-kill -9 PID
+ps -aux | grep Demo2-BE/cronjob.py
+sudo kill -9 PID
 ```
 
 ## Steps
@@ -29,7 +35,7 @@ kill -9 PID
 #(optional) 用phpmyadmin 觀察data (terminal 2)
 docker run --name myphpadminVisualTon -d -e PMA_HOST=3.112.222.156 -e PMA_PORT=3306 -p 8081:80 phpmyadmin/phpmyadmin
 
-#create DB
+#create table
 python scripts/create_DB.py
 
 #get the block id(the start block)
