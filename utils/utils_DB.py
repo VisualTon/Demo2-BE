@@ -8,6 +8,13 @@ class tx:
     confirm_time: int
 
 
+class addr:
+    name: str
+    addr: str
+    type: str
+    url: str
+
+
 def add_data(conn, transaction_data):
     try:
         cursor = conn.cursor()
@@ -102,3 +109,51 @@ def get_table_data(conn) -> [tx]:
 
     except Exception as e:
         print(f"Error fetching data: {str(e)}")
+
+
+def add_addr_data(conn, name, addr, type, url):
+    try:
+        cursor = conn.cursor()
+        insert_query = """
+        INSERT INTO addresses (name, addr, type, url)
+        VALUES (%s, %s, %s, %s)
+        """
+        data = (name, addr, type, url)
+        cursor.execute(insert_query, data)
+        conn.commit()
+        print("Data added successfully")
+    except Exception as e:
+        conn.rollback()
+        print(f"Error adding data: {str(e)}")
+
+
+def delete_addr_data(conn, name):
+    try:
+        cursor = conn.cursor()
+        delete_query = "DELETE FROM addresses WHERE name = ?"
+        cursor.execute(delete_query, (name,))
+        conn.commit()
+        print(f"Data for '{name}' deleted successfully")
+    except Exception as e:
+        conn.rollback()
+        print(f"Error deleting data: {str(e)}")
+
+
+def get_addr_data_as_dict(conn):
+    cursor = conn.cursor()
+    select_query = "SELECT * FROM addresses"
+    cursor.execute(select_query)
+    rows = cursor.fetchall()
+
+    addr_data_dict = {}
+    for row in rows:
+        addr = row[1]
+        name = row[0]
+        addr_type = row[2]
+        url = row[3]
+
+        addr_info = {"name": name, "type": addr_type, "url": url}
+
+        addr_data_dict[addr] = addr_info
+
+    return addr_data_dict

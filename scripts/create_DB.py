@@ -35,10 +35,27 @@ def create_table(conn):
     print("Table 'transactions' created successfully")
 
 
+def create_addr_table(conn):
+    cursor = conn.cursor()
+
+    create_table_query = """
+    CREATE TABLE IF NOT EXISTS addresses (
+        name VARCHAR(255),
+        addr VARCHAR(255),
+        type VARCHAR(255),
+        url VARCHAR(255)
+    )
+    """
+    cursor.execute(create_table_query)
+    conn.commit()
+    print("Table 'addresses' created successfully")
+
+
 if __name__ == "__main__":
     conn = create_connection()
 
     if conn:
         print("success connect")
-        create_table(conn)
+        # create_table(conn)
+        create_addr_table(conn)
         conn.close()
