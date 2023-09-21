@@ -139,6 +139,55 @@ def delete_addr_data(conn, name):
         print(f"Error deleting data: {str(e)}")
 
 
+def get_tx_table_rowdata_amount(conn) -> int:
+    try:
+        cursor = conn.cursor()
+        count_query = "SELECT COUNT(*) FROM transactions"
+        cursor.execute(count_query)
+        count: int = cursor.fetchone()[0]
+        return count
+
+    except Exception as e:
+        print(f"Error fetching data: {str(e)}")
+
+
+def get_min_max_amount_data(conn) -> [tx]:
+    cursor = conn.cursor()
+    min_amount_query = "SELECT * FROM transactions WHERE Amount = (SELECT MIN(Amount) FROM transactions)"
+    cursor.execute(min_amount_query)
+    min_data = cursor.fetchone()
+
+    max_amount_query = "SELECT * FROM transactions WHERE Amount = (SELECT MAX(Amount) FROM transactions)"
+    cursor.execute(max_amount_query)
+    max_data = cursor.fetchone()
+    min_tx = None
+    max_tx = None
+
+    if min_data:
+        min_tx = {
+            "tx_id": min_data[0],
+            "block_id": min_data[1],
+            "sender_address": min_data[2],
+            "receiver_address": min_data[3],
+            "type": min_data[4],
+            "amount": min_data[5],
+            "confirm_time": min_data[6],
+        }
+
+    if max_data:
+        max_tx = {
+            "tx_id": max_data[0],
+            "block_id": max_data[1],
+            "sender_address": max_data[2],
+            "receiver_address": max_data[3],
+            "type": max_data[4],
+            "amount": max_data[5],
+            "confirm_time": max_data[6],
+        }
+
+    return [min_tx, max_tx]
+
+
 def get_addr_data_as_dict(conn):
     cursor = conn.cursor()
     select_query = "SELECT * FROM addresses"

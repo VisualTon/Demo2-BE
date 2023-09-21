@@ -7,9 +7,16 @@ from utils.utils_api import (
     create_connection,
     filter_tx,
 )
-from utils.utils_DB import add_data, delete_data, get_table_data, delete_duplicate_data
+from utils.utils_DB import (
+    add_data,
+    delete_data,
+    get_table_data,
+    delete_duplicate_data,
+    get_tx_table_rowdata_amount,
+    get_min_max_amount_data,
+)
 
-prev_latest_block = 38488382
+prev_latest_block = 38590264
 remove_from = 0
 BLOCK_NUM = 5000
 MAX_BLOCK_DISTANCE = 15
@@ -65,6 +72,13 @@ async def update_database(conn):
     print("fetch out all exist DB data...")
     all_txs: [tx] = get_table_data(conn)
     # print(f"there are {len(all_txs)} txs in table.")
+
+    tx_amount: int = get_tx_table_rowdata_amount(conn)
+    print(f"tx amount: {tx_amount}")
+
+    min_max_tx: [tx] = get_min_max_amount_data(conn)
+    print("min tx and max tx:")
+    print(min_max_tx)
 
     remove_from = latest_block_id - BLOCK_NUM
     prev_latest_block = latest_block_id
