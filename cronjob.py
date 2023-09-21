@@ -11,7 +11,7 @@ from utils.utils_DB import add_data, delete_data, get_table_data, delete_duplica
 
 prev_latest_block = 38488382
 remove_from = 0
-BLOCK_NUM = 500
+BLOCK_NUM = 5000
 MAX_BLOCK_DISTANCE = 15
 
 # base on basechain, not masterchain
