@@ -16,7 +16,7 @@ from utils.utils_DB import (
     get_min_max_amount_data,
 )
 
-prev_latest_block = 38590264
+prev_latest_block = 38595043
 remove_from = 0
 BLOCK_NUM = 5000
 MAX_BLOCK_DISTANCE = 15
@@ -76,9 +76,9 @@ async def update_database(conn):
     tx_amount: int = get_tx_table_rowdata_amount(conn)
     print(f"tx amount: {tx_amount}")
 
-    min_max_tx: [tx] = get_min_max_amount_data(conn)
-    print("min tx and max tx:")
-    print(min_max_tx)
+    # min_max_tx: [tx] = get_min_max_amount_data(conn)
+    # print("min tx and max tx:")
+    # print(min_max_tx)
 
     remove_from = latest_block_id - BLOCK_NUM
     prev_latest_block = latest_block_id

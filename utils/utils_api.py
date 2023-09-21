@@ -4,6 +4,7 @@ import time
 import requests
 import asyncio
 import json
+from typing import Optional
 
 VALUE_UPPER_LIMIT = 1000000000 * 100
 # 100 TON
@@ -54,7 +55,7 @@ async def get_request(block_url):
         print("Request failed with status code:", response.status_code)
 
 
-async def analyze_tx_to_tx_info(transaction, block_id: int) -> tx | None:
+async def analyze_tx_to_tx_info(transaction, block_id: int) -> Optional[tx]:
     if "in_msg" in transaction:
         in_msg = transaction["in_msg"]
         if "source" in in_msg and "destination" in in_msg and in_msg["value"] > 0:
@@ -98,7 +99,7 @@ async def get_txs_by_block_ids(block_ids: [int]) -> [tx]:
     for id in block_ids:
         # print(f"start to get block {id} tx...")
 
-        if id % 2 == 1:
+        if id % 2 == 0:
             continue
         else:
             block_url = f"https://tonapi.io/v2/blockchain/blocks/(0,8000000000000000,{id})/transactions"
